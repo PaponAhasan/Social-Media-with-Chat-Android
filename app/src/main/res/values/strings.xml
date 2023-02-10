@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Social Media</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="web_client_id">546478727912-hcsn0ksadh17gqa7j9bsg31cuia7m0r9.apps.googleusercontent.com</string>
+    <string name="gddh">bdfb</string>
+    <string name="postEdit">Edit</string>
+    <string name="postDelete">Delete</string>
+
+</resources>
