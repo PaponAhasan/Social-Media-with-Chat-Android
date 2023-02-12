@@ -53,4 +53,16 @@ class PostDao {
             postCollections.document(postId).delete()
        //}
     }
+
+    fun editPost(postId: String, text: String){
+        val currentUser = auth.currentUser!!.uid
+
+        GlobalScope.launch {
+            val userDao = UserDao()
+            val user = userDao.getUserById(currentUser).await().toObject(User::class.java)!!
+            val currentTime = System.currentTimeMillis()
+            val post = Post(text, user, currentTime)
+            postCollections.document(postId).set(post)
+        }
+    }
 }

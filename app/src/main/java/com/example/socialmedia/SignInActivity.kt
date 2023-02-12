@@ -1,16 +1,14 @@
 package com.example.socialmedia
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.appcompat.app.AppCompatActivity
 import com.example.socialmedia.daos.UserDao
-import com.example.socialmedia.databinding.FragmentSignInBinding
+import com.example.socialmedia.databinding.ActivitySignInBinding
 import com.example.socialmedia.models.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -28,32 +26,22 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
-class SignInFragment : Fragment() {
+class SignInActivity : AppCompatActivity() {
 
-    private var _binding: FragmentSignInBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: ActivitySignInBinding
     private lateinit var auth: FirebaseAuth
-
     private lateinit var googleSignInClient: GoogleSignInClient
 
     companion object {
-        private const val TAG = "SignInFragment"
+        private const val TAG = "SignInActivity"
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSignInBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //  (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
         binding.signInBtn.setOnClickListener {
             signIn()
         }
@@ -63,10 +51,9 @@ class SignInFragment : Fragment() {
             .requestEmail()
             .build()
 
-        googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         auth = Firebase.auth
-
     }
 
     override fun onStart() {
@@ -121,16 +108,17 @@ class SignInFragment : Fragment() {
             val userDao = UserDao()
             userDao.allUser(user)
 
-            val action = SignInFragmentDirections.actionSignInFragmentToHomeFragment()
-            findNavController().navigate(action)
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
         } else {
             binding.signInBtn.visibility = View.VISIBLE
             binding.signInPb.visibility = View.GONE
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 }
