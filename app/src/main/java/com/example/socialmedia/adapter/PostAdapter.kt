@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +29,6 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
     companion object {
         private const val TAG = "PostAdapter"
     }
-
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val postText: TextView = itemView.findViewById(R.id.postTitle)
@@ -48,6 +46,9 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
         )
         viewHolder.likeButton.setOnClickListener {
             listener.onLikeClicked(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
+        }
+        viewHolder.userText.setOnClickListener {
+            listener.onUserMessageListener(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
         }
         return viewHolder
     }
@@ -89,12 +90,9 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
         popupMenu.menuInflater.inflate(R.menu.recyclerviw_menu, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.post_edit ->
-                    Toast.makeText(
-                        holder.itemView.context,
-                        "You Clicked : " + item.title,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                R.id.post_edit ->{
+                    listener.onEditClickedListener(snapshots.getSnapshot(holder.absoluteAdapterPosition).id)
+                }
 
                 R.id.post_delete ->
                     if (model.createdBy.uid == currentUser!!.uid) {
@@ -103,12 +101,6 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
                         with(builder) {
                             setTitle("Delete")
                             setMessage("Are you sure?")
-                            setPositiveButtonIcon(
-                                ContextCompat.getDrawable(
-                                    holder.itemView.context,
-                                    android.R.drawable.ic_menu_delete
-                                )
-                            )
                             setIcon(
                                 ContextCompat.getDrawable(
                                     holder.itemView.context,
@@ -119,7 +111,6 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
                         builder.setPositiveButton("Yes") { dialog, which ->
                             // Perform some action when the positive button is clicked
                             listener.onPostDeleteClicked(snapshots.getSnapshot(holder.absoluteAdapterPosition).id)
-                            //Toast.makeText(holder.itemView.context, "DocumentSnapshot successfully deleted!", Toast.LENGTH_SHORT).show()
                         }
                         builder.setNegativeButton("No") { dialog, which ->
                             // Perform some action when the negative button is clicked
@@ -135,8 +126,9 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
         popupMenu.show()
     }
 }
-
 interface IPostAdapter {
     fun onLikeClicked(postId: String)
     fun onPostDeleteClicked(postId: String)
+    fun onEditClickedListener(postId: String)
+    fun onUserMessageListener(postId: String)
 }
