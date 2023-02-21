@@ -17,6 +17,11 @@
             android:title="Logout"
             android:icon="@drawable/ic_logout"
             app:showAsAction="never"/>
+        <item
+            android:id="@+id/menu_search"
+            android:title="Search"
+            android:icon="@drawable/ic_search"
+            app:showAsAction="always"/>
     </group>
     <group android:id="@+id/groupB">
         <item

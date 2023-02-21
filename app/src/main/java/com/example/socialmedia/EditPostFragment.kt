@@ -1,5 +1,6 @@
 package com.example.socialmedia
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.socialmedia.daos.PostDao
@@ -66,8 +68,9 @@ class EditPostFragment : Fragment() {
                     if (postText.isNotEmpty()) {
                         postDao.editPost(postId, postText)
 
-                        val action = EditPostFragmentDirections.actionEditPostFragmentToHomeFragment()
-                        findNavController().navigate(action)
+                        Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
+
+                        //Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
                     }
                     else{
                         Toast.makeText(context, "text required", Toast.LENGTH_SHORT).show()

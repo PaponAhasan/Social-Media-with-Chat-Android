@@ -1,9 +1,11 @@
 package com.example.socialmedia
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.socialmedia.daos.PostDao
 import com.example.socialmedia.databinding.FragmentCreatePostBinding
@@ -43,8 +45,10 @@ class CreatePostFragment : Fragment() {
                     if (postText.isNotEmpty()) {
                         postDao.addPost(postText)
 
-                        val action = CreatePostFragmentDirections.actionCreatePostFragmentToHomeFragment()
-                        findNavController().navigate(action)
+                        Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.homeFragment)
+
+//                        val action = CreatePostFragmentDirections.actionCreatePostFragmentToHomeFragment()
+//                        findNavController().navigate(action)
                     }
                     else{
                         Toast.makeText(context, "text required", Toast.LENGTH_SHORT).show()

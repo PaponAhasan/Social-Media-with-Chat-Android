@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/chatFragment"
+        <item android:id="@+id/messageFragment"
             android:icon="@drawable/ic_message"
             android:title="Message"/>
     </group>

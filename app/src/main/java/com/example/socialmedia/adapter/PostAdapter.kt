@@ -1,5 +1,6 @@
 package com.example.socialmedia.adapter
 
+import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.socialmedia.R
@@ -48,7 +50,9 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
             listener.onLikeClicked(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
         }
         viewHolder.userText.setOnClickListener {
-            listener.onUserMessageListener(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
+            if(viewHolder.userText.text != currentUser!!.displayName){
+                listener.onUserMessageListener(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
+           }
         }
         return viewHolder
     }
@@ -61,7 +65,8 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
         holder.likeCount.text = model.likeBy.size.toString()
         holder.createdAt.text = Utils.getTimeAgo(model.createdAt)
 
-        val isLiked = model.likeBy.contains(currentUser!!.uid)
+        val isLiked = model.likeBy.contains(currentUser?.uid)
+        Log.e(TAG, "post $isLiked")
         if (isLiked) {
             holder.likeButton.setImageDrawable(
                 ContextCompat.getDrawable(
@@ -76,7 +81,7 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
             )
         }
 
-        if (model.createdBy.uid != currentUser.uid){
+        if (model.createdBy.uid != currentUser?.uid){
             holder.textOption.visibility = View.INVISIBLE
         }
 

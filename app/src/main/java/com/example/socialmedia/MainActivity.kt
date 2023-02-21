@@ -1,7 +1,9 @@
 package com.example.socialmedia
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -52,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.chatFragment -> {
+                R.id.messageFragment -> {
                     val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
                     navController.navigate(R.id.listChatFragment)
                     drawerLayout.close()
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                         Intent(this, SignInActivity::class.java)
                     )
                     finish()
+
                     return@setNavigationItemSelectedListener true
                 }
                 else -> return@setNavigationItemSelectedListener true
@@ -94,7 +97,17 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
-        updateUI(currentUser)
+        //updateUI(currentUser)
+
+        if(!onBoardingFinished()){
+            Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.splashFragment)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val sharedPref = this.getSharedPreferences("onBoarding", Context.MODE_PRIVATE)
+        sharedPref.edit().remove("splashFinished").apply()
     }
 
     private fun updateUI(firebaseUser: FirebaseUser?) {
@@ -104,4 +117,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun onBoardingFinished(): Boolean {
+        val sharedPref = this.getSharedPreferences("onBoarding", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("splashFinished", false)
+    }
 }

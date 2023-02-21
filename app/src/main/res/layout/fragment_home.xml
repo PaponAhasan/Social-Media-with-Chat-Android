@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:textColor="#878484"
+        android:textColor="@color/black"
         android:background="@drawable/edit_text_round_shape"
         android:gravity="top"
         android:hint="What's on your mind?" />
@@ -24,7 +24,7 @@
         android:layout_margin="12dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/postsRv"
+            android:id="@+id/postRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

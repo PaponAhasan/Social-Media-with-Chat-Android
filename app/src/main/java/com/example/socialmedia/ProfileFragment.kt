@@ -9,7 +9,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.socialmedia.adapter.IPostAdapter
-import com.example.socialmedia.adapter.PostAdapter
+import com.example.socialmedia.adapter.IPostProfileAdapter
+import com.example.socialmedia.adapter.ProfileAdapter
 import com.example.socialmedia.daos.PostDao
 import com.example.socialmedia.databinding.FragmentProfileBinding
 import com.example.socialmedia.models.Post
@@ -19,12 +20,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 
-class ProfileFragment : Fragment(),IPostAdapter {
+class ProfileFragment : Fragment(), IPostProfileAdapter {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var postAdapter: PostAdapter
+    private lateinit var profileAdapter: ProfileAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var postDao: PostDao
 
@@ -65,9 +66,9 @@ class ProfileFragment : Fragment(),IPostAdapter {
         val recyclerViewOptions =
             FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post::class.java).build()
 
-        postAdapter = PostAdapter(recyclerViewOptions, this)
+        profileAdapter = ProfileAdapter(recyclerViewOptions, this)
 
-        binding.profileRv.adapter = postAdapter
+        binding.profileRv.adapter = profileAdapter
         binding.profileRv.layoutManager = LinearLayoutManager(context)
         binding.profileRv.itemAnimator = null
     }
@@ -85,18 +86,28 @@ class ProfileFragment : Fragment(),IPostAdapter {
         findNavController().navigate(action)
     }
 
-    override fun onUserMessageListener(postId: String) {
-        TODO("Not yet implemented")
-    }
+//    override fun onUserMessageListener(postId: String) {
+//
+//        postDao.postCollections.document(postId).get().addOnSuccessListener {
+//            val post = it.toObject(Post::class.java)
+//            if(post != null){
+//                val messageToId = post.createdBy.uid
+//                val action = ProfileFragmentDirections.actionProfileFragmentToChatFragment(messageToId)
+//                findNavController().navigate(action)
+//            }
+//        }
+//
+//        //Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.chatFragment)
+//    }
 
     override fun onStart() {
         super.onStart()
-        postAdapter.startListening()
+        profileAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
-        postAdapter.stopListening()
+        profileAdapter.stopListening()
     }
 
 //    override fun onResume() {

@@ -11,29 +11,17 @@
         android:label="Social App"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_createPostFragment"
-            app:destination="@id/createPostFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_listChatFragment"
-            app:destination="@id/listChatFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/createPostFragment"
         android:name="com.example.socialmedia.CreatePostFragment"
         android:label="Create Post"
-        tools:layout="@layout/fragment_create_post">
-        <action
-            android:id="@+id/action_createPostFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_create_post"/>
     <fragment
         android:id="@+id/listChatFragment"
         android:name="com.example.socialmedia.ListChatFragment"
@@ -47,6 +35,9 @@
         <action
             android:id="@+id/action_profileFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/editPostFragment"
@@ -56,8 +47,41 @@
         <argument
             android:name="post_id"
             app:argType="string" />
-        <action
-            android:id="@+id/action_editPostFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.socialmedia.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="recipientId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.socialmedia.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="com.example.socialmedia.onboarding.ViewPagerFragment"
+        android:label="fragment_view_pager"
+        tools:layout="@layout/fragment_view_pager" >
+        <action
+            android:id="@+id/action_viewPagerFragment_to_signInActivity"
+            app:destination="@id/signInActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/signInActivity"
+        android:name="com.example.socialmedia.SignInActivity"
+        android:label="activity_sign_in"
+        tools:layout="@layout/activity_sign_in" />
+
 </navigation>

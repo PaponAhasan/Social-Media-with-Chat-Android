@@ -1,11 +1,15 @@
 package com.example.socialmedia
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.socialmedia.adapter.IPostAdapter
@@ -13,6 +17,8 @@ import com.example.socialmedia.adapter.PostAdapter
 import com.example.socialmedia.daos.PostDao
 import com.example.socialmedia.databinding.FragmentHomeBinding
 import com.example.socialmedia.models.Post
+import com.example.socialmedia.utils.ScrollToBottomObserver
+import com.example.socialmedia.utils.ScrollToTopObserver
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -25,7 +31,10 @@ class HomeFragment : Fragment(), IPostAdapter {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var postAdapter: PostAdapter
+    private lateinit var manager: LinearLayoutManager
+
+    // Firebase instance variables
+    private lateinit var adapter: PostAdapter
     private lateinit var postDao: PostDao
     private lateinit var auth: FirebaseAuth
 
@@ -44,6 +53,8 @@ class HomeFragment : Fragment(), IPostAdapter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
+
         auth = Firebase.auth
         postDao = PostDao()
 
@@ -53,8 +64,10 @@ class HomeFragment : Fragment(), IPostAdapter {
 
         }
         binding.postBtn.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToCreatePostFragment()
-            findNavController().navigate(action)
+            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+                .navigate(R.id.createPostFragment)
+//            val action = HomeFragmentDirections.actionHomeFragmentToCreatePostFragment()
+//            findNavController().navigate(action)
         }
         binding.swipeContainer.setOnRefreshListener {
             binding.swipeContainer.isRefreshing = false
@@ -84,13 +97,16 @@ class HomeFragment : Fragment(), IPostAdapter {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.options_menu, menu)
+
         val menuItemAMessage = menu.findItem(R.id.messageId)
         menuItemAMessage.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.messageId -> {
                     // Handle the click event for action item A
-                    val action = HomeFragmentDirections.actionHomeFragmentToListChatFragment()
-                    findNavController().navigate(action)
+                    Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+                        .navigate(R.id.listChatFragment)
+//                    val action = HomeFragmentDirections.actionHomeFragmentToListChatFragment()
+//                    findNavController().navigate(action)
                     return@setOnMenuItemClickListener true
                 }
                 else -> return@setOnMenuItemClickListener false
@@ -101,8 +117,9 @@ class HomeFragment : Fragment(), IPostAdapter {
         menuItemAProfile.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_profile -> {
-                    val action = HomeFragmentDirections.actionHomeFragmentToProfileFragment()
-                    findNavController().navigate(action)
+                    Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
+//                    val action = HomeFragmentDirections.actionHomeFragmentToProfileFragment()
+//                    findNavController().navigate(action)
                     return@setOnMenuItemClickListener true
                 }
                 else -> return@setOnMenuItemClickListener false
@@ -117,6 +134,7 @@ class HomeFragment : Fragment(), IPostAdapter {
                     val intent = Intent(requireContext(), SignInActivity::class.java)
                     startActivity(intent)
                     activity?.finish()
+
                     return@setOnMenuItemClickListener true
                 }
                 else -> return@setOnMenuItemClickListener false
@@ -136,11 +154,16 @@ class HomeFragment : Fragment(), IPostAdapter {
         val recyclerViewOptions =
             FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post::class.java).build()
 
-        postAdapter = PostAdapter(recyclerViewOptions, this)
+        adapter = PostAdapter(recyclerViewOptions, this)
+        binding.postRecyclerView.adapter = adapter
+        manager =  LinearLayoutManager(context)
+        binding.postRecyclerView.layoutManager = manager
+        binding.postRecyclerView.itemAnimator = null
 
-        binding.postsRv.adapter = postAdapter
-        binding.postsRv.layoutManager = LinearLayoutManager(context)
-        binding.postsRv.itemAnimator = null
+        // Scroll down when a new message arrives
+        adapter.registerAdapterDataObserver(
+            ScrollToTopObserver(binding.postRecyclerView, adapter, manager)
+        )
     }
 
     override fun onLikeClicked(postId: String) {
@@ -152,26 +175,34 @@ class HomeFragment : Fragment(), IPostAdapter {
     }
 
     override fun onEditClickedListener(postId: String) {
-        val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment(postId)
-        findNavController().navigate(action)
+        Navigation.findNavController(activity as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
+        //val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment(postId)
+       // findNavController().navigate(action)
     }
 
     override fun onUserMessageListener(postId: String) {
-        TODO("Not yet implemented")
+        postDao.postCollections.document(postId).get().addOnSuccessListener {
+            val post = it.toObject(Post::class.java)
+            if (post != null) {
+                val messageToId = post.createdBy.uid
+                val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(messageToId)
+                findNavController().navigate(action)
+            }
+        }
+        //Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.chatFragment)
     }
 
     override fun onStart() {
         super.onStart()
+        adapter.startListening()
+
         val currentUser = auth.currentUser
-        updateUI(currentUser)
-
-        postAdapter.startListening()
+        //updateUI(currentUser)
     }
-
 
     override fun onStop() {
         super.onStop()
-        postAdapter.stopListening()
+        adapter.stopListening()
     }
 
     private fun updateUI(firebaseUser: FirebaseUser?) {

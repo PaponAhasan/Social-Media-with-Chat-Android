@@ -6,4 +6,7 @@
     <string name="postEdit">Edit</string>
     <string name="postDelete">Delete</string>
 
+    <string name="btn_phone_auth_text">Sign in with phone</string>
+    <string name="btn_google_auth_text">Sign in with google</string>
+
 </resources>

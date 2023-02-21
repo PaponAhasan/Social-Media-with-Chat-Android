@@ -1,6 +1,8 @@
 package com.example.socialmedia
 
 import android.app.Activity
+import androidx.activity.addCallback
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -44,6 +46,11 @@ class SignInActivity : AppCompatActivity() {
         //  (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         binding.signInBtn.setOnClickListener {
             signIn()
+        }
+
+        binding.btnPhoneAuth.setOnClickListener {
+            val intent = Intent(this, PhoneAuthActivity::class.java)
+            startActivity(intent)
         }
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -111,6 +118,8 @@ class SignInActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
 
+            onSplashFinished()
+
         } else {
             binding.signInBtn.visibility = View.VISIBLE
             binding.signInPb.visibility = View.GONE
@@ -120,5 +129,12 @@ class SignInActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
+    }
+
+    private fun onSplashFinished(){
+        val sharedPref = this.getSharedPreferences("onBoarding", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putBoolean("splashFinished", true)
+        editor.apply()
     }
 }
