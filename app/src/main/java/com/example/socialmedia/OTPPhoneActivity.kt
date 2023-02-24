@@ -11,12 +11,19 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.example.socialmedia.daos.UserDao
+import com.example.socialmedia.databinding.ActivityOtpphoneBinding
+import com.example.socialmedia.models.User
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.util.concurrent.TimeUnit
 
 class OTPPhoneActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityOtpphoneBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var verifyBtn: Button
     private lateinit var resendTV: TextView
@@ -34,7 +41,10 @@ class OTPPhoneActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_otpphone)
+        binding = ActivityOtpphoneBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         OTP = intent.getStringExtra("OTP").toString()
         resendToken = intent.getParcelableExtra("resendToken")!!
         phoneNumber = intent.getStringExtra("phoneNumber")!!
@@ -68,8 +78,6 @@ class OTPPhoneActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please Enter OTP", Toast.LENGTH_SHORT).show()
             }
-
-
         }
     }
 
@@ -145,9 +153,9 @@ class OTPPhoneActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-
                     Toast.makeText(this, "Authenticate Successfully", Toast.LENGTH_SHORT).show()
-                    sendToMain()
+                    onSplashFinished()
+                    startActivity(Intent(this, EditProfileFragment::class.java))
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.d("TAG", "signInWithPhoneAuthCredential: ${task.exception.toString()}")
@@ -160,11 +168,6 @@ class OTPPhoneActivity : AppCompatActivity() {
             }
     }
 
-    private fun sendToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
-        onSplashFinished()
-    }
-
     private fun addTextChangeListener() {
         inputOTP1.addTextChangedListener(EditTextWatcher(inputOTP1))
         inputOTP2.addTextChangedListener(EditTextWatcher(inputOTP2))
@@ -175,7 +178,7 @@ class OTPPhoneActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        auth = FirebaseAuth.getInstance()
+        auth = Firebase.auth
         progressBar = findViewById(R.id.otpProgressBar)
         verifyBtn = findViewById(R.id.verifyOTPBtn)
         resendTV = findViewById(R.id.resendTextView)
@@ -187,7 +190,6 @@ class OTPPhoneActivity : AppCompatActivity() {
         inputOTP6 = findViewById(R.id.otpEditText6)
     }
 
-
     inner class EditTextWatcher(private val view: View) : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -198,7 +200,6 @@ class OTPPhoneActivity : AppCompatActivity() {
         }
 
         override fun afterTextChanged(p0: Editable?) {
-
             val text = p0.toString()
             when (view.id) {
                 R.id.otpEditText1 -> if (text.length == 1) inputOTP2.requestFocus()
@@ -207,13 +208,11 @@ class OTPPhoneActivity : AppCompatActivity() {
                 R.id.otpEditText4 -> if (text.length == 1) inputOTP5.requestFocus() else if (text.isEmpty()) inputOTP3.requestFocus()
                 R.id.otpEditText5 -> if (text.length == 1) inputOTP6.requestFocus() else if (text.isEmpty()) inputOTP4.requestFocus()
                 R.id.otpEditText6 -> if (text.isEmpty()) inputOTP5.requestFocus()
-
             }
         }
-
     }
 
-    private fun onSplashFinished(){
+    private fun onSplashFinished() {
         val sharedPref = this.getSharedPreferences("onBoarding", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.putBoolean("splashFinished", true)

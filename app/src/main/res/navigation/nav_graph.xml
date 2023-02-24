@@ -35,9 +35,6 @@
         <action
             android:id="@+id/action_profileFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/editPostFragment"
@@ -55,6 +52,9 @@
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="recipientId"
+            app:argType="string" />
+        <argument
+            android:name="recipientName"
             app:argType="string" />
     </fragment>
     <fragment
@@ -83,5 +83,10 @@
         android:name="com.example.socialmedia.SignInActivity"
         android:label="activity_sign_in"
         tools:layout="@layout/activity_sign_in" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.socialmedia.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
 
 </navigation>

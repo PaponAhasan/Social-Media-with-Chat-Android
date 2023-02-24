@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.socialmedia.adapter.IPostAdapter
 import com.example.socialmedia.adapter.IPostProfileAdapter
+import com.example.socialmedia.adapter.PostAdapter
 import com.example.socialmedia.adapter.ProfileAdapter
 import com.example.socialmedia.daos.PostDao
 import com.example.socialmedia.databinding.FragmentProfileBinding
@@ -32,7 +33,7 @@ class ProfileFragment : Fragment(), IPostProfileAdapter {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
@@ -61,7 +62,7 @@ class ProfileFragment : Fragment(), IPostProfileAdapter {
     private fun setUpRecyclerView() {
         val postsCollections = postDao.postCollections
         val query = postsCollections
-            .whereEqualTo("createdBy.uid", auth.currentUser!!.uid)
+            //.whereEqualTo("createdBy.uid", auth.currentUser!!.uid)
             .orderBy("createdAt", Query.Direction.DESCENDING)
         val recyclerViewOptions =
             FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post::class.java).build()

@@ -19,14 +19,14 @@ class PostDao {
     fun addPost(text: String) {
         val currentUser = auth.currentUser!!.uid
 
-        GlobalScope.launch {
-            withContext(Dispatchers.IO){
+        CoroutineScope(Dispatchers.IO).launch {
+            //withContext(Dispatchers.IO) {
                 val userDao = UserDao()
                 val user = userDao.getUserById(currentUser).await().toObject(User::class.java)!!
                 val currentTime = System.currentTimeMillis()
                 val post = Post(text, user, currentTime)
                 postCollections.document().set(post)
-            }
+            //}
         }
     }
 
@@ -35,8 +35,8 @@ class PostDao {
     }
 
     fun updateLikes(postId: String) {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO){
+        CoroutineScope(Dispatchers.IO).launch {
+            //withContext(Dispatchers.IO) {
                 val currentUserId = auth.currentUser!!.uid
                 val post = getPostById(postId).await().toObject(Post::class.java)!!
                 val isLiked = post.likeBy.contains(currentUserId)
@@ -47,27 +47,25 @@ class PostDao {
                     post.likeBy.add(currentUserId)
                 }
                 postCollections.document(postId).set(post)
-           }
+            //}
         }
     }
 
     fun deletePost(postId: String) {
-        //GlobalScope.launch {
         postCollections.document(postId).delete()
-        //}
     }
 
     fun editPost(postId: String, text: String) {
         val currentUser = auth.currentUser!!.uid
 
-        GlobalScope.launch {
-            withContext(Dispatchers.IO){
+        CoroutineScope(Dispatchers.IO).launch {
+            //withContext(Dispatchers.IO) {
                 val userDao = UserDao()
                 val user = userDao.getUserById(currentUser).await().toObject(User::class.java)!!
                 val currentTime = System.currentTimeMillis()
                 val post = Post(text, user, currentTime)
                 postCollections.document(postId).set(post)
-            }
+            //}
         }
     }
 }

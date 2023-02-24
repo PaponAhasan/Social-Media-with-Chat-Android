@@ -21,11 +21,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 
 class SignInActivity : AppCompatActivity() {
@@ -44,7 +41,7 @@ class SignInActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //  (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-        binding.signInBtn.setOnClickListener {
+        binding.btnGoogleAuth.setOnClickListener {
             signIn()
         }
 
@@ -89,11 +86,11 @@ class SignInActivity : AppCompatActivity() {
         }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        binding.signInBtn.visibility = View.GONE
+        binding.btnGoogleAuth.visibility = View.GONE
         binding.signInPb.visibility = View.VISIBLE
 
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        GlobalScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             auth.signInWithCredential(credential).await()
             val user = auth.currentUser
             withContext(Dispatchers.Main) {
@@ -121,7 +118,7 @@ class SignInActivity : AppCompatActivity() {
             onSplashFinished()
 
         } else {
-            binding.signInBtn.visibility = View.VISIBLE
+            binding.btnGoogleAuth.visibility = View.VISIBLE
             binding.signInPb.visibility = View.GONE
         }
     }

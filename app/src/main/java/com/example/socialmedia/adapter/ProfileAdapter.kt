@@ -48,6 +48,7 @@ class ProfileAdapter(options: FirestoreRecyclerOptions<Post>, private val listen
         viewHolder.likeButton.setOnClickListener {
             listener.onLikeClicked(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
         }
+
 //        viewHolder.userText.setOnClickListener {
 //            if(viewHolder.userText.text != currentUser!!.displayName){
 //                listener.onUserMessageListener(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
@@ -56,42 +57,47 @@ class ProfileAdapter(options: FirestoreRecyclerOptions<Post>, private val listen
         return viewHolder
     }
 
-    override fun onBindViewHolder(holder: ProfileViewHolder, position: Int, model: Post) {
-        holder.postText.text = model.text
-        holder.userText.text = model.createdBy.displayName
-        Glide.with(holder.userImage.context).load(model.createdBy.imageUrl).circleCrop()
-            .into(holder.userImage)
-        holder.likeCount.text = model.likeBy.size.toString()
-        holder.createdAt.text = Utils.getTimeAgo(model.createdAt)
+    override fun onBindViewHolder(holder: ProfileViewHolder, position: Int, model: Post){
+        if (currentUser?.uid == model.createdBy.uid){
+            holder.postText.text = model.text
+            holder.userText.text = model.createdBy.displayName
+            Glide.with(holder.userImage.context).load(model.createdBy.imageUrl).circleCrop()
+                .into(holder.userImage)
+            holder.likeCount.text = model.likeBy.size.toString()
+            holder.createdAt.text = Utils.getTimeAgo(model.createdAt)
 
-        val isLiked = model.likeBy.contains(currentUser!!.uid)
+            val isLiked = model.likeBy.contains(currentUser.uid)
 
-        Log.e(TAG, "Profile $isLiked")
+            Log.e(TAG, "Profile $isLiked")
 
-        if (isLiked) {
-            holder.likeButton.setImageDrawable(
-                ContextCompat.getDrawable(
-                    holder.itemView.context, R.drawable.ic_liked
+            if (isLiked) {
+                holder.likeButton.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        holder.itemView.context, R.drawable.ic_liked
+                    )
                 )
-            )
-        } else {
-            holder.likeButton.setImageDrawable(
-                ContextCompat.getDrawable(
-                    holder.itemView.context, R.drawable.ic_unlike
+            } else {
+                holder.likeButton.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        holder.itemView.context, R.drawable.ic_unlike
+                    )
                 )
-            )
+            }
+
+            holder.textOption.setOnClickListener {
+                postEditDeletePopMenu(holder, model)
+            }
+        }else{
+            holder.itemView.visibility = View.GONE
+            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
         }
 
 //        if (model.createdBy.uid != currentUser.uid){
 //            holder.textOption.visibility = View.INVISIBLE
 //        }
-
-        holder.textOption.setOnClickListener {
-            postEditDeletePopMenu(holder, position, model)
-        }
     }
 
-    private fun postEditDeletePopMenu(holder: ProfileViewHolder, position: Int, model: Post) {
+    private fun postEditDeletePopMenu(holder: ProfileViewHolder, model: Post) {
         val popupMenu = PopupMenu(holder.itemView.context, holder.textOption)
         popupMenu.menuInflater.inflate(R.menu.recyclerviw_menu, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { item ->

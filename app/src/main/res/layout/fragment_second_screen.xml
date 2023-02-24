@@ -5,8 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".onboarding.screens.SecondScreen">
+
     <TextView
-        android:id="@+id/skip"
+        android:id="@+id/skip2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
@@ -50,9 +51,7 @@
         android:layout_marginEnd="50dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center"
-        android:text="Connect with your friends and family through
-         private messaging and send and receive messages in real time,
-          no matter where you are in the world."
+        android:text="@string/splash_message"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

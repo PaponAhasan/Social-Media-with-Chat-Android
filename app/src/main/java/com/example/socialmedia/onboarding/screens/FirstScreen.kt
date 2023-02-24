@@ -1,5 +1,6 @@
 package com.example.socialmedia.onboarding.screens
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager2.widget.ViewPager2
 import com.example.socialmedia.R
+import com.example.socialmedia.SignInActivity
 
 class FirstScreen : Fragment() {
 
@@ -22,8 +24,12 @@ class FirstScreen : Fragment() {
         activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.GONE
 
         val viewPager = activity?.findViewById<ViewPager2>(R.id.viewPager)
-        view?.findViewById<TextView>(R.id.next)?.setOnClickListener {
+        view.findViewById<TextView>(R.id.next).setOnClickListener {
             viewPager?.currentItem = 1
+        }
+
+        view.findViewById<TextView>(R.id.skip).setOnClickListener {
+            startActivity(Intent(activity, SignInActivity::class.java))
         }
 
         return view

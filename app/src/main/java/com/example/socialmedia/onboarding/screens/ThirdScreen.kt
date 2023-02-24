@@ -1,6 +1,7 @@
 package com.example.socialmedia.onboarding.screens
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.socialmedia.R
+import com.example.socialmedia.SignInActivity
 
 class ThirdScreen : Fragment() {
 
@@ -33,6 +35,10 @@ class ThirdScreen : Fragment() {
                     ).build()
             )
             onBoardingFinished()
+        }
+
+        view.findViewById<TextView>(R.id.skip3).setOnClickListener {
+            startActivity(Intent(activity, SignInActivity::class.java))
         }
 
         return view

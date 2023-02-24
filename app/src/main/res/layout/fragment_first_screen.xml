@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".onboarding.screens.FirstScreen">
 
@@ -52,7 +53,7 @@
         android:textAllCaps="true"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center"
-        android:text="Scroll through your personalized news feed to see what your friends and family are up to"
+        android:text="@string/splash_newsfeed"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

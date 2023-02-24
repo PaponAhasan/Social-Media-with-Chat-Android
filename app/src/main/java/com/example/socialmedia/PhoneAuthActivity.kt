@@ -83,6 +83,7 @@ class PhoneAuthActivity : AppCompatActivity() {
         startActivity(Intent(this , MainActivity::class.java))
         onSplashFinished()
     }
+
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {

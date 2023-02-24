@@ -68,7 +68,10 @@ class EditPostFragment : Fragment() {
                     if (postText.isNotEmpty()) {
                         postDao.editPost(postId, postText)
 
-                        Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
+                        //Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
+
+                        Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.homeFragment)
+
 
                         //Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
                     }

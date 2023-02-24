@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditProfileFragment" >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userImageIV"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:tooltipText="SELECT PHOTO"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounder_imageview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/outline_add_photo_alternate"
+        app:layout_constraintTop_toTopOf="@+id/userImageIV"
+        app:layout_constraintLeft_toLeftOf="@+id/userImageIV"
+        app:layout_constraintRight_toRightOf="@+id/userImageIV"
+        app:layout_constraintBottom_toBottomOf="@+id/userImageIV"/>
+
+    <EditText
+        android:id="@+id/userNameET"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/edit_text_bg"
+        android:ems="10"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:inputType="textPersonName"
+        android:hint="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userImageIV" />
+
+    <Button
+        android:id="@+id/userSaveBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Update"
+        android:background="@drawable/rounded_button"
+        app:layout_constraintEnd_toEndOf="@+id/userNameET"
+        app:layout_constraintStart_toStartOf="@+id/userNameET"
+        app:layout_constraintTop_toBottomOf="@+id/userNameET" />
+</androidx.constraintlayout.widget.ConstraintLayout>

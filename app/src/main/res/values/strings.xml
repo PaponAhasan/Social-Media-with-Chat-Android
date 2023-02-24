@@ -7,6 +7,9 @@
     <string name="postDelete">Delete</string>
 
     <string name="btn_phone_auth_text">Sign in with phone</string>
-    <string name="btn_google_auth_text">Sign in with google</string>
+    <string name="btn_google_auth_text">Sign in with gmail</string>
+    <string name="splash_message">Connect with your friends and family through private messaging and send and receive messages in real time, no matter where you are in the world.</string>
+    <string name="splash_newsfeed">Scroll through your personalized news feed to see what your friends and family are up to</string>
+    <string name="splash_profile">Share your life with your social media network by creating a personalized profile</string>
 
 </resources>

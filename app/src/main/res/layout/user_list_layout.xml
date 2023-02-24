@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/edit_text_shadow"
     android:layout_margin="5dp"
     android:padding="10dp">
 
     <ImageView
         android:id="@+id/userIv"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="User Name" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,22 +23,23 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/userNameTv"
+            android:id="@+id/userNameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
             android:text="Name"
             app:layout_constraintLeft_toRightOf="@+id/userIv"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/userMsgBtn"
+        <TextView
+            android:id="@+id/userMsgTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Message"
+            android:layout_marginTop="5dp"
+            android:text="Last message"
             app:layout_constraintLeft_toRightOf="@+id/userIv"
-            app:layout_constraintTop_toBottomOf="@+id/userNameTv" />
+            app:layout_constraintTop_toBottomOf="@+id/userNameTV" />
     </LinearLayout>
 </LinearLayout>

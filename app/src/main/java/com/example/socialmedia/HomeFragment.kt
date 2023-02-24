@@ -25,6 +25,11 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment(), IPostAdapter {
 
@@ -175,20 +180,32 @@ class HomeFragment : Fragment(), IPostAdapter {
     }
 
     override fun onEditClickedListener(postId: String) {
-        Navigation.findNavController(activity as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
-        //val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment(postId)
-       // findNavController().navigate(action)
+        //Navigation.findNavController(activity as Activity, R.id.nav_host_fragment).navigate(R.id.profileFragment)
+        val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment(postId)
+        findNavController().navigate(action)
     }
 
     override fun onUserMessageListener(postId: String) {
-        postDao.postCollections.document(postId).get().addOnSuccessListener {
-            val post = it.toObject(Post::class.java)
-            if (post != null) {
-                val messageToId = post.createdBy.uid
-                val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(messageToId)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val post = postDao.postCollections.document(postId).get().await().toObject(Post::class.java)
+            val messageToId = post?.createdBy?.uid
+            val messageToName = post?.createdBy?.displayName
+            withContext(Dispatchers.Main){
+                val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(messageToId!!, messageToName!!)
                 findNavController().navigate(action)
             }
         }
+//        postDao.postCollections.document(postId).get().addOnSuccessListener {
+//            val post = it.toObject(Post::class.java)
+//            if (post != null) {
+//                val messageToId = post.createdBy.uid
+//                val messageToName = post.createdBy.displayName
+//                val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(messageToId, messageToName!!)
+//                findNavController().navigate(action)
+//            }
+//        }
+
         //Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.chatFragment)
     }
 

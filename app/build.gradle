@@ -21,6 +21,7 @@ android {
 
     buildTypes {
         release {
+            multiDexKeepFile file('multidex-config.txt')
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -41,7 +42,7 @@ android {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
     /* UI */
     implementation 'com.google.android.material:material:1.8.0'
@@ -60,23 +61,25 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     /* Kotlin coroutines */
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4')
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     /* Firebase */
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
     // Firebase Authentication
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     // Google Play services library
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
-    // Firebase Cloud Firestore
-    implementation 'com.google.firebase:firebase-firestore-ktx'
+    // Firebase Cloud Firestor
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.3'
+    // Firebase Cloud Storage
+    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
 
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
-
-    // FirebaseUI for Cloud Firestore UI
+    // FirebaseUI for Cloud Firestor UI
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
 

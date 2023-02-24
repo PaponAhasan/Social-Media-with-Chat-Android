@@ -24,7 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts
  * https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContracts.OpenDocument
  */
 class OpenDocumentContract : ActivityResultContracts.OpenDocument() {
-
     override fun createIntent(context: Context, input: Array<String>): Intent {
         val intent = super.createIntent(context, input)
         intent.addCategory(Intent.CATEGORY_OPENABLE)

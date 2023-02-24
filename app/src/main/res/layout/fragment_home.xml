@@ -10,23 +10,27 @@
         android:id="@+id/postBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:textColor="@color/black"
+        android:layout_margin="10dp"
         android:background="@drawable/edit_text_round_shape"
         android:gravity="top"
-        android:hint="What's on your mind?" />
+        android:hint="What's on your mind?"
+        android:textColor="@color/black" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/postBtn"
-        android:layout_margin="12dp">
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_post" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -6,7 +6,8 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/receiverMessageLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -33,8 +34,8 @@
                     android:id="@+id/receiver_message_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Receiver Name"
                     android:layout_marginBottom="5dp"
+                    android:hint="Receiver Name"
                     android:paddingHorizontal="10dp"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -49,50 +50,52 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/black" />
 
-                <TextView
-                    android:id="@+id/receiver_message_date"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="receiver messages here"
-                    android:paddingHorizontal="10dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/receiver_message_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="receiver messages here"
+                        android:paddingHorizontal="10dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <ImageView
+                        android:id="@+id/receiverMsgLikeButton"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="15dp"
+                        android:contentDescription="LikeButton"
+                        android:src="@drawable/ic_liked" />
+
+                    <TextView
+                        android:id="@+id/receiverMsgLikeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
             </LinearLayout>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/receiverMsgLikeButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:contentDescription="LikeButton" />
-
-                <TextView
-                    android:id="@+id/receiverMsgLikeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/senderMessageLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="end"
+        android:layout_gravity="end"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/sender_message_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:hint="sender name"
             android:paddingHorizontal="10dp"
-            android:layout_marginBottom="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -106,6 +109,18 @@
             android:padding="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/sender_message_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="true"
+            android:maxWidth="300dp"
+            android:maxHeight="200dp"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/profile" />
 
         <TextView
             android:id="@+id/sender_message_date"

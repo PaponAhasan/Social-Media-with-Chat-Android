@@ -27,8 +27,8 @@ class UserAdapter(options: FirestoreRecyclerOptions<User>) :
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val userName: TextView = itemView.findViewById(R.id.userNameTv)
-        val userMsg: Button = itemView.findViewById(R.id.userMsgBtn)
+        val userName: TextView = itemView.findViewById(R.id.userNameTV)
+        val userMsg: TextView = itemView.findViewById(R.id.userMsgTV)
         val userImage: ImageView = itemView.findViewById(R.id.userIv)
     }
 
@@ -41,9 +41,6 @@ class UserAdapter(options: FirestoreRecyclerOptions<User>) :
         holder.userName.text = model.displayName
         Glide.with(holder.itemView.context).load(model.imageUrl).override(500, 200).circleCrop()
             .into(holder.userImage)
-        holder.userMsg.setOnClickListener {
-
-        }
 
     }
 }

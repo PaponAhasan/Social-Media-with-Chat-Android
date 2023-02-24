@@ -10,12 +10,10 @@ class UserDao {
     private val db = FirebaseFirestore.getInstance()
     val userCollection = db.collection("users")
 
-    fun allUser(user: User?){
+    fun allUser(user: User?) {
         user?.let {
-            GlobalScope.launch {
-                withContext(Dispatchers.IO){
-                    userCollection.document(user.uid).set(it)
-                }
+            CoroutineScope(Dispatchers.IO).launch {
+                userCollection.document(user.uid).set(it)
             }
         }
     }

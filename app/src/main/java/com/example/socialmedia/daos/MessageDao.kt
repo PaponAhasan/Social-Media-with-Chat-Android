@@ -17,30 +17,34 @@ class MessageDao {
     private val db = FirebaseFirestore.getInstance()
     val msgCollections = db.collection("messages")
 
-    fun sendMessage(text: String, messageToId: String) {
+    fun sendMessage(text: String?, messageToId: String, image: String?) {
         val currentUser = auth.currentUser!!.uid
 
-        GlobalScope.launch {
-            withContext(Dispatchers.IO){
+        CoroutineScope(Dispatchers.IO).launch {
+            //withContext(Dispatchers.IO){
                 val userDao = UserDao()
                 val messageBy = userDao.getUserById(currentUser).await().toObject(User::class.java)!!
                 val messageTo = userDao.getUserById(messageToId).await().toObject(User::class.java)!!
                 val currentTime = System.currentTimeMillis()
-                val message = Message(text, messageBy, messageTo, currentTime)
+                val message = Message(text, messageBy, messageTo, image, currentTime)
                 msgCollections.document().set(message)
-            }
+            //}
         }
     }
 
-    private fun getMessageById(postId: String): Task<DocumentSnapshot> {
-        return msgCollections.document(postId).get()
+    fun deleteMessage(messageId: String) {
+        msgCollections.document(messageId).delete()
     }
 
-    fun updateLikes(postId: String) {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO){
+    private fun getMessageById(messageId: String): Task<DocumentSnapshot> {
+        return msgCollections.document(messageId).get()
+    }
+
+    fun updateLikes(messageId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            //withContext(Dispatchers.IO){
                 val currentUserId = auth.currentUser!!.uid
-                val message = getMessageById(postId).await().toObject(Message::class.java)!!
+                val message = getMessageById(messageId).await().toObject(Message::class.java)!!
                 val isLiked = message.likeBy.contains(currentUserId)
 
                 if (isLiked) {
@@ -48,8 +52,8 @@ class MessageDao {
                 } else {
                     message.likeBy.add(currentUserId)
                 }
-                msgCollections.document(postId).set(message)
+                msgCollections.document(messageId).set(message)
             }
-        }
+        //}
     }
 }

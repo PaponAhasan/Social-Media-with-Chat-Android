@@ -31,6 +31,7 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
     companion object {
         private const val TAG = "PostAdapter"
     }
+
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val postText: TextView = itemView.findViewById(R.id.postTitle)
@@ -50,9 +51,9 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
             listener.onLikeClicked(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
         }
         viewHolder.userText.setOnClickListener {
-            if(viewHolder.userText.text != currentUser!!.displayName){
+            if (viewHolder.userText.text != currentUser!!.displayName) {
                 listener.onUserMessageListener(snapshots.getSnapshot(viewHolder.absoluteAdapterPosition).id)
-           }
+            }
         }
         return viewHolder
     }
@@ -66,7 +67,6 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
         holder.createdAt.text = Utils.getTimeAgo(model.createdAt)
 
         val isLiked = model.likeBy.contains(currentUser?.uid)
-        Log.e(TAG, "post $isLiked")
         if (isLiked) {
             holder.likeButton.setImageDrawable(
                 ContextCompat.getDrawable(
@@ -81,7 +81,7 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
             )
         }
 
-        if (model.createdBy.uid != currentUser?.uid){
+        if (model.createdBy.uid != currentUser?.uid) {
             holder.textOption.visibility = View.INVISIBLE
         }
 
@@ -95,7 +95,7 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
         popupMenu.menuInflater.inflate(R.menu.recyclerviw_menu, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.post_edit ->{
+                R.id.post_edit -> {
                     listener.onEditClickedListener(snapshots.getSnapshot(holder.absoluteAdapterPosition).id)
                 }
 
@@ -131,6 +131,7 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, private val listener:
         popupMenu.show()
     }
 }
+
 interface IPostAdapter {
     fun onLikeClicked(postId: String)
     fun onPostDeleteClicked(postId: String)
